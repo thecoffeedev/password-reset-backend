@@ -16,6 +16,7 @@ const port = process.env.PORT || 3000;
 const dbUrl = process.env.DB_URL || "mongodb://127.0.0.1:27017";
 const saltRounds = 10;
 
+// Nodemailer email authentication
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -24,15 +25,18 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Details of data to be sent in verification email
 const mailData = {
   from: process.env.EMAIL,
   subject: "Reset your password",
 };
 
+// Message to be sent in the verification email
 let mailMessage = (url) => {
   return `<p>Hi there,<br> You have been requested to reset your password.<br>please click on the link below to reset the password.<br><a href='${url}' target='_blank'>${url}</a><br>Thank you...</p>`;
 };
 
+// This end-point helps to create new user
 app.post("/register-user", async (req, res) => {
   try {
     let client = await mongoClient.connect(dbUrl);
@@ -54,6 +58,7 @@ app.post("/register-user", async (req, res) => {
   }
 });
 
+// This end-point helps to login the existing user
 app.post("/login", async (req, res) => {
   try {
     let client = await mongoClient.connect(dbUrl);
@@ -76,6 +81,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// This end-point helps the user to generate verification mail to reset the password
 app.post("/forgot-password", async (req, res) => {
   try {
     let client = await mongoClient.connect(dbUrl);
@@ -107,6 +113,7 @@ app.post("/forgot-password", async (req, res) => {
   }
 });
 
+// This end-point helps to verify the randomly generated string used for changing the password
 app.post("/verify-random-string", async (req, res) => {
   try {
     let client = await mongoClient.connect(dbUrl);
@@ -131,6 +138,7 @@ app.post("/verify-random-string", async (req, res) => {
   }
 });
 
+// This end-point helps to set a new password only if the conditions are met
 app.put("/assign-password", async (req, res) => {
   try {
     let client = await mongoClient.connect(dbUrl);
