@@ -47,7 +47,7 @@ app.post("/register-user", async (req, res) => {
       let hash = await bcrypt.hash(req.body.password, salt);
       req.body.password = hash;
       let result = await db.collection("users").insertOne(req.body);
-      res.status(200).json({ message: "user registered successfully" });
+      res.status(200).json({ message: "user registered successfully, Login now to continue" });
     } else {
       res.status(400).json({ message: "user already exists, please login" });
     }
